@@ -115,7 +115,7 @@ export default function HomePage() {
           </div>
 
           <div className="glass-panel p-8 rounded-3xl space-y-4">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
+            <div className="w-12 h-12 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary">
               <Heart size={24} />
             </div>
             <h3 className="text-xl font-bold text-white">社区驱动</h3>

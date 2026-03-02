@@ -5,8 +5,9 @@
   --font-sans: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-primary: #10b981; /* Emerald 500 */
-  --color-brand-secondary: #059669; /* Emerald 600 */
+  --color-brand-primary: #00A4FF; /* New highlight color */
+  --color-brand-secondary: #0035D4; /* New accent color */
+  --color-brand-gradient: #0088CC; /* Gradient end color - slightly lighter than primary */
   --color-bg-dark: #0a0a0a;
   --color-card-dark: #171717;
   --color-border-dark: #262626;
@@ -23,7 +24,7 @@
 }
 
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-emerald-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-gradient;
 }
 
 /* Custom Scrollbar */

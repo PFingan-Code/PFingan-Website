@@ -40,7 +40,7 @@ export default function DonatePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="glass-panel p-10 rounded-3xl space-y-8 text-center">
-          <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 mx-auto">
+          <div className="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary mx-auto">
             <MessageSquare size={32} />
           </div>
           <div className="space-y-2">

@@ -11,10 +11,12 @@ interface Player {
 
 export default function AboutPage() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadPlayers = async () => {
       try {
+        setIsLoading(true);
         const res = await fetch(BASE_URL + 'src/GUGUbot.json');
         if (!res.ok) return;
         const data = (await res.json()) as Record<string, string>;
@@ -29,6 +31,8 @@ export default function AboutPage() {
         setPlayers(mapped);
       } catch {
         // ignore fetch errors, keep default empty list
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -104,17 +108,19 @@ export default function AboutPage() {
           此处列出了 PFingan 服务器截止关服前所有已绑定账号的成员，感谢每一位玩家的陪伴与支持。
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-          {players.length === 0 ? (
+          {isLoading ? (
             Array.from({length: 8}).map((_, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 rounded-lg bg-white/5 border border-border-dark flex items-center justify-center text-slate-600">
                   <Users size={20} />
                 </div>
-                <span className="text-[10px] text-slate-500">
-                  玩家 {i + 1}
-                </span>
+                <span className="text-[10px] text-slate-500">加载中</span>
               </div>
             ))
+          ) : players.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-8 text-slate-500 text-sm">
+              暂无成员数据
+            </div>
           ) : (
             players.map((player) => (
               <div

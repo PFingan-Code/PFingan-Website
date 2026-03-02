@@ -72,7 +72,7 @@ export default function ServerPage() {
 
       {RESOURCES.length > 0 && (
         <div className="space-y-8">
-          <h3 className="text-2xl font-bold text-white border-l-4 border-emerald-500 pl-4">
+          <h3 className="text-2xl font-bold text-white border-l-4 border-brand-primary pl-4">
             相关资源与工具
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -109,7 +109,7 @@ function ServerCard({
               className={cn(
                 'text-xs font-bold uppercase tracking-widest',
                 archive.status === 'active'
-                  ? 'text-emerald-400'
+                  ? 'text-brand-primary'
                   : 'text-slate-500',
               )}
             >

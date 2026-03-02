@@ -1,5 +1,5 @@
-import {BASE_URL} from '@/src/constants';
-import {cn} from '@/src/lib/utils';
+import { BASE_URL } from '@/src/constants';
+import { cn } from '@/src/lib/utils';
 import {
   ChevronRight,
   Github,
@@ -11,16 +11,16 @@ import {
   Users,
   X,
 } from 'lucide-react';
-import {AnimatePresence, motion} from 'motion/react';
-import {useEffect, useState} from 'react';
-import {Outlet, useLocation, useNavigate} from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  {id: 'home', label: '首页', icon: HomeIcon},
-  {id: 'server', label: '服务器', icon: ServerIcon},
-  {id: 'moment', label: '瞬间', icon: ImageIcon},
-  {id: 'about', label: '关于', icon: Users},
-  {id: 'donate', label: '赞助', icon: Heart},
+  { id: 'home', label: '首页', icon: HomeIcon },
+  { id: 'server', label: '服务器', icon: ServerIcon },
+  { id: 'moment', label: '瞬间', icon: ImageIcon },
+  { id: 'about', label: '关于', icon: Users },
+  { id: 'donate', label: '赞助', icon: Heart },
 ] as const;
 
 const TAB_PATHS: Record<string, string> = {
@@ -140,9 +140,9 @@ export default function MainLayout() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{opacity: 0, y: -20}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0, y: -20}}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 z-40 bg-bg-dark pt-24 px-6 md:hidden"
           >
             <div className="flex flex-col gap-2">
@@ -283,7 +283,7 @@ export default function MainLayout() {
             </p>
             <div className="flex items-center gap-6">
               <a
-                href="https://github.com/LoosePrince/PFingan-Website"
+                href="https://github.com/PFingan-Code/PFingan-Website"
                 className="text-slate-500 hover:text-white transition-colors"
               >
                 <Github size={20} />
