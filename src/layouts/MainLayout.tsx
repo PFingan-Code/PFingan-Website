@@ -188,7 +188,7 @@ export default function MainLayout() {
                 <span className="text-xl font-bold text-white">PFingan</span>
               </div>
               <p className="text-slate-400 max-w-xs leading-relaxed">
-                和谐温馨的“肝帝”生存服务器，记录平凡玩家的不平凡瞬间。加入我们，开启你的生存之旅。
+                和谐温馨的“养老”生存服务器，记录平凡玩家的不平凡瞬间。加入我们，开启你的生存之旅。
               </p>
             </div>
 
@@ -279,7 +279,7 @@ export default function MainLayout() {
 
           <div className="mt-16 pt-8 border-t border-border-dark flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-slate-500 text-sm">
-              版权 © 2022-2025 PFingan. 版权所有.
+              版权 © 2022-{new Date().getFullYear()} PFingan. 版权所有.
             </p>
             <div className="flex items-center gap-6">
               <a
