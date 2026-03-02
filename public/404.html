@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>页面未找到 - PFingan</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+          sans-serif;
+        background: radial-gradient(circle at top, #1d283a 0, #020617 45%, #000 100%);
+        color: #e5e7eb;
+      }
+      .card {
+        width: 100%;
+        max-width: 480px;
+        padding: 32px 28px;
+        border-radius: 24px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        box-shadow:
+          0 24px 80px rgba(15, 23, 42, 0.85),
+          0 0 0 1px rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(22px);
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #38bdf8;
+        background: rgba(56, 189, 248, 0.08);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        margin-bottom: 16px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 20%, #f97316, #fb7185);
+        box-shadow: 0 0 0 3px rgba(248, 250, 252, 0.04);
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 32px;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        color: #f9fafb;
+      }
+      .sub {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #9ca3af;
+      }
+      .actions {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn-primary,
+      .btn-ghost {
+        appearance: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+      .btn-primary {
+        color: white;
+        background: linear-gradient(135deg, #38bdf8, #6366f1, #ec4899);
+        box-shadow:
+          0 18px 40px rgba(59, 130, 246, 0.5),
+          0 0 0 1px rgba(59, 130, 246, 0.3);
+      }
+      .btn-primary span.icon {
+        font-size: 16px;
+        transform: translateX(0);
+        transition: transform 0.15s ease-out;
+      }
+      .btn-primary:hover span.icon {
+        transform: translateX(2px);
+      }
+      .btn-ghost {
+        color: #d1d5db;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.4);
+      }
+      .hint {
+        margin-top: 18px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #6b7280;
+      }
+      @media (max-width: 480px) {
+        .card {
+          margin: 0 16px;
+          padding: 24px 20px;
+        }
+        h1 {
+          font-size: 26px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" aria-labelledby="title">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span>PFingan</span>
+      </div>
+      <h1 id="title">哎呀，这里什么都没有</h1>
+      <p class="sub">
+        你访问的页面不存在，可能是链接已失效，或者内容被移动了。可以先回到首页，再通过导航找到你想去的地方。
+      </p>
+      <div class="actions">
+        <a href="/" class="btn-primary">
+          <span>返回首页</span>
+          <span class="icon">↩</span>
+        </a>
+        <button class="btn-ghost" type="button" onclick="window.history.back()">
+          返回上一页
+        </button>
+      </div>
+      <p class="hint">404 · page not found</p>
+    </main>
+  </body>
+  </html>
+
