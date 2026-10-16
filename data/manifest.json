@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "contentRevision": 2,
+  "contentHash": "f8c773725db5db2cb6722c8ef44f2a0d16d4617c9a225e458f2da1fde0724af4",
+  "updatedAt": "2026-10-16T18:58:44.407Z",
+  "files": [
+    "site.json",
+    "features.json",
+    "servers.json",
+    "resources.json",
+    "members.json",
+    "moments.json",
+    "donations.json"
+  ]
+}

@@ -1,0 +1,288 @@
+{
+  "team": [
+    {
+      "name": "树梢",
+      "id": "Shusao",
+      "avatar": "https://crafthead.net/helm/53a92c14e6724bde8f9d4232bd83b5da",
+      "role": "服主",
+      "description": "PFingan 的核心团队领导者。"
+    },
+    {
+      "name": "雪开",
+      "id": "XueK__",
+      "avatar": "https://crafthead.net/helm/0a46df00cbe64b5db2c22fc1a165fe13",
+      "role": "管理员 / 技术支持",
+      "description": "服务器技术支持，负责服务器异常处理、部署及插件开发。目前负责 PF-GUGUBot 插件及其前置 PF-cq_qq_api 开发。",
+      "links": [
+        {
+          "label": "PF-GUGUBot",
+          "url": "https://github.com/LoosePrince/PF-GUGUBot"
+        },
+        {
+          "label": "PF-cq_qq_api",
+          "url": "https://github.com/XueK66/PF-cq_qq_api"
+        }
+      ]
+    },
+    {
+      "name": "fake_neko",
+      "id": "fake_neko",
+      "avatar": "https://crafthead.net/helm/33dff60d8a5148cf9ac99ea02c37364e",
+      "role": "管理员 / 资金提供 / 协助管理",
+      "description": "为服务器一周目后期和二周目全程提供资金，平时也会帮助群聊管理。"
+    },
+    {
+      "name": "流墨",
+      "id": "LiuMo_Ya",
+      "avatar": "https://crafthead.net/helm/9e833e40349047b9b36e82a236dd111a",
+      "role": "管理员 / 红石技术",
+      "description": "服务器认证红石大佬，曾负责红石审核。"
+    }
+  ],
+  "community": [
+    {
+      "id": "LiuMo_Ya",
+      "name": "LiuMo_Ya",
+      "sortOrder": 1,
+      "avatar": "https://crafthead.net/helm/LiuMo_Ya"
+    },
+    {
+      "id": "XueK__",
+      "name": "XueK__",
+      "sortOrder": 2,
+      "avatar": "https://crafthead.net/helm/XueK__"
+    },
+    {
+      "id": "fake_neko",
+      "name": "fake_neko",
+      "sortOrder": 3,
+      "avatar": "https://crafthead.net/helm/fake_neko"
+    },
+    {
+      "id": "Night7sky",
+      "name": "Night7sky",
+      "sortOrder": 4,
+      "avatar": "https://crafthead.net/helm/Night7sky"
+    },
+    {
+      "id": "XRG128821",
+      "name": "XRG128821",
+      "sortOrder": 5,
+      "avatar": "https://crafthead.net/helm/XRG128821"
+    },
+    {
+      "id": "Stone_P1ckaxe",
+      "name": "Stone_P1ckaxe",
+      "sortOrder": 6,
+      "avatar": "https://crafthead.net/helm/Stone_P1ckaxe"
+    },
+    {
+      "id": "CopycatTexas406",
+      "name": "CopycatTexas406",
+      "sortOrder": 7,
+      "avatar": "https://crafthead.net/helm/CopycatTexas406"
+    },
+    {
+      "id": "Suwanfeng233",
+      "name": "Suwanfeng233",
+      "sortOrder": 8,
+      "avatar": "https://crafthead.net/helm/Suwanfeng233"
+    },
+    {
+      "id": "xiaochenyi",
+      "name": "xiaochenyi",
+      "sortOrder": 9,
+      "avatar": "https://crafthead.net/helm/xiaochenyi"
+    },
+    {
+      "id": "pingguomc",
+      "name": "pingguomc",
+      "sortOrder": 10,
+      "avatar": "https://crafthead.net/helm/pingguomc"
+    },
+    {
+      "id": "Bai_sh",
+      "name": "Bai_sh",
+      "sortOrder": 11,
+      "avatar": "https://crafthead.net/helm/Bai_sh"
+    },
+    {
+      "id": "ANGzilan",
+      "name": "ANGzilan",
+      "sortOrder": 12,
+      "avatar": "https://crafthead.net/helm/ANGzilan"
+    },
+    {
+      "id": "Bnz_m",
+      "name": "Bnz_m",
+      "sortOrder": 13,
+      "avatar": "https://crafthead.net/helm/Bnz_m"
+    },
+    {
+      "id": "DOCskati",
+      "name": "DOCskati",
+      "sortOrder": 14,
+      "avatar": "https://crafthead.net/helm/DOCskati"
+    },
+    {
+      "id": "wlckkll1226",
+      "name": "wlckkll1226",
+      "sortOrder": 15,
+      "avatar": "https://crafthead.net/helm/wlckkll1226"
+    },
+    {
+      "id": "Violet_Evegarden",
+      "name": "Violet_Evegarden",
+      "sortOrder": 16,
+      "avatar": "https://crafthead.net/helm/Violet_Evegarden"
+    },
+    {
+      "id": "1_Jerry",
+      "name": "1_Jerry",
+      "sortOrder": 17,
+      "avatar": "https://crafthead.net/helm/1_Jerry"
+    },
+    {
+      "id": "HuliIce",
+      "name": "HuliIce",
+      "sortOrder": 18,
+      "avatar": "https://crafthead.net/helm/HuliIce"
+    },
+    {
+      "id": "K11_Wa",
+      "name": "K11_Wa",
+      "sortOrder": 19,
+      "avatar": "https://crafthead.net/helm/K11_Wa"
+    },
+    {
+      "id": "yanhualiao",
+      "name": "yanhualiao",
+      "sortOrder": 20,
+      "avatar": "https://crafthead.net/helm/yanhualiao"
+    },
+    {
+      "id": "ALways1995",
+      "name": "ALways1995",
+      "sortOrder": 21,
+      "avatar": "https://crafthead.net/helm/ALways1995"
+    },
+    {
+      "id": "zhangziqin",
+      "name": "zhangziqin",
+      "sortOrder": 22,
+      "avatar": "https://crafthead.net/helm/zhangziqin"
+    },
+    {
+      "id": "shanyi43",
+      "name": "shanyi43",
+      "sortOrder": 23,
+      "avatar": "https://crafthead.net/helm/shanyi43"
+    },
+    {
+      "id": "Iron_P1ckaxe",
+      "name": "Iron_P1ckaxe",
+      "sortOrder": 24,
+      "avatar": "https://crafthead.net/helm/Iron_P1ckaxe"
+    },
+    {
+      "id": "zjc233",
+      "name": "zjc233",
+      "sortOrder": 25,
+      "avatar": "https://crafthead.net/helm/zjc233"
+    },
+    {
+      "id": "zyjsss",
+      "name": "zyjsss",
+      "sortOrder": 26,
+      "avatar": "https://crafthead.net/helm/zyjsss"
+    },
+    {
+      "id": "qinghuandu55",
+      "name": "qinghuandu55",
+      "sortOrder": 27,
+      "avatar": "https://crafthead.net/helm/qinghuandu55"
+    },
+    {
+      "id": "SYL_TS",
+      "name": "SYL_TS",
+      "sortOrder": 28,
+      "avatar": "https://crafthead.net/helm/SYL_TS"
+    },
+    {
+      "id": "STLvector",
+      "name": "STLvector",
+      "sortOrder": 29,
+      "avatar": "https://crafthead.net/helm/STLvector"
+    },
+    {
+      "id": "LingLXRD",
+      "name": "LingLXRD",
+      "sortOrder": 30,
+      "avatar": "https://crafthead.net/helm/LingLXRD"
+    },
+    {
+      "id": "Peak_sheep",
+      "name": "Peak_sheep",
+      "sortOrder": 31,
+      "avatar": "https://crafthead.net/helm/Peak_sheep"
+    },
+    {
+      "id": "LobbyChen",
+      "name": "LobbyChen",
+      "sortOrder": 32,
+      "avatar": "https://crafthead.net/helm/LobbyChen"
+    },
+    {
+      "id": "SanJiu_39",
+      "name": "SanJiu_39",
+      "sortOrder": 33,
+      "avatar": "https://crafthead.net/helm/SanJiu_39"
+    },
+    {
+      "id": "wzr321",
+      "name": "wzr321",
+      "sortOrder": 34,
+      "avatar": "https://crafthead.net/helm/wzr321"
+    },
+    {
+      "id": "insidehuliice",
+      "name": "insidehuliice",
+      "sortOrder": 35,
+      "avatar": "https://crafthead.net/helm/insidehuliice"
+    },
+    {
+      "id": "yqm031",
+      "name": "yqm031",
+      "sortOrder": 36,
+      "avatar": "https://crafthead.net/helm/yqm031"
+    },
+    {
+      "id": "creeper1331",
+      "name": "creeper1331",
+      "sortOrder": 37,
+      "avatar": "https://crafthead.net/helm/creeper1331"
+    },
+    {
+      "id": "Youzi_05",
+      "name": "Youzi_05",
+      "sortOrder": 38,
+      "avatar": "https://crafthead.net/helm/Youzi_05"
+    },
+    {
+      "id": "Leaf_QwQ",
+      "name": "Leaf_QwQ",
+      "sortOrder": 39,
+      "avatar": "https://crafthead.net/helm/Leaf_QwQ"
+    },
+    {
+      "id": "endioe",
+      "name": "endioe",
+      "sortOrder": 40,
+      "avatar": "https://crafthead.net/helm/endioe"
+    }
+  ],
+  "avatarProvider": {
+    "enabled": true,
+    "template": "https://crafthead.net/helm/{id}"
+  }
+}

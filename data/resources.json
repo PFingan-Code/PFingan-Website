@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "id": "tools",
+      "title": "可能会用到的工具",
+      "period": "长期更新",
+      "tags": [
+        "工具",
+        "软件"
+      ],
+      "description": "如果你想开一个服务器，你可能会需要这些工具。",
+      "attachments": [
+        {
+          "name": "可能会用到的工具.zip",
+          "url": "https://www.123pan.com/s/Jvh8Vv-TEuf3",
+          "code": "TXLr"
+        }
+      ]
+    },
+    {
+      "id": "source",
+      "title": "PFingan.com 网页源码",
+      "period": "2025",
+      "tags": [
+        "工具",
+        "代码"
+      ],
+      "description": "PFingan.com 的网页源码加文件素材等等。",
+      "attachments": [
+        {
+          "name": "neocities-pfingan.zip",
+          "url": "https://www.123684.com/s/Jvh8Vv-awUf3?",
+          "code": "bobW"
+        }
+      ]
+    }
+  ]
+}

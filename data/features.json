@@ -1,0 +1,105 @@
+{
+  "items": [
+    {
+      "id": "feature-1",
+      "title": "服务器说明",
+      "tip": "点击查看",
+      "tag": "说明",
+      "description": "点击查看服务器说明哦~",
+      "target": {
+        "type": "route",
+        "value": "/server"
+      },
+      "enabled": true
+    },
+    {
+      "id": "feature-2",
+      "title": "瞬间",
+      "tip": "点击查看哦",
+      "tag": "相册",
+      "description": "服务器的照片和视频",
+      "target": {
+        "type": "route",
+        "value": "/moment"
+      },
+      "enabled": true
+    },
+    {
+      "id": "feature-3",
+      "title": "关于我们",
+      "tip": "点击查看哦",
+      "tag": "成员",
+      "description": "成员列表",
+      "target": {
+        "type": "route",
+        "value": "/about"
+      },
+      "enabled": true
+    },
+    {
+      "id": "feature-4",
+      "title": "公告",
+      "tip": "点击查看哦",
+      "tag": "公告",
+      "description": "服务器和其它内容的公告",
+      "target": {
+        "type": "feature",
+        "value": "公告"
+      },
+      "enabled": false,
+      "disabledReason": "尚未配置"
+    },
+    {
+      "id": "feature-5",
+      "title": "投票",
+      "tip": "点击查看哦",
+      "tag": "投票",
+      "description": "想参与服务器的发展方向？为你想要的投上一票吧",
+      "target": {
+        "type": "feature",
+        "value": "投票"
+      },
+      "enabled": false,
+      "disabledReason": "尚未配置"
+    },
+    {
+      "id": "feature-6",
+      "title": "反馈",
+      "tip": "点击查看哦",
+      "tag": "反馈",
+      "description": "有任何问题都可以反馈哦",
+      "target": {
+        "type": "feature",
+        "value": "反馈"
+      },
+      "enabled": false,
+      "disabledReason": "尚未配置"
+    },
+    {
+      "id": "feature-7",
+      "title": "提交",
+      "tip": "点击查看哦",
+      "tag": "资源",
+      "description": "有好东西想向我们分享？我们正乐于此！",
+      "target": {
+        "type": "feature",
+        "value": "提交"
+      },
+      "enabled": false,
+      "disabledReason": "尚未配置"
+    },
+    {
+      "id": "feature-8",
+      "title": "待添加",
+      "tip": "点击查看哦",
+      "tag": "无",
+      "description": "未开放此功能",
+      "target": {
+        "type": "feature",
+        "value": "待添加"
+      },
+      "enabled": false,
+      "disabledReason": "尚未配置"
+    }
+  ]
+}
