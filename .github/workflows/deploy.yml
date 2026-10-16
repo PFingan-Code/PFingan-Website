@@ -1,11 +1,17 @@
-name: Deploy PFingan site to GitHub Pages
+name: Deploy site to GitHub Pages
 
 on:
   push:
     branches:
       - main
-      - master
+      - data
   workflow_dispatch:
+    inputs:
+      reason:
+        description: '重建原因'
+        required: false
+        type: string
+        default: 'manual rebuild'
 
 permissions:
   contents: read
@@ -13,15 +19,21 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: pages
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout website source
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fetch data branch
+        run: git fetch --no-tags origin data
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,8 +44,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
+      - name: Validate data
+        run: npm run validate:data
+        env:
+          DATA_REF: origin/data
+
+      - name: Validate types
+        run: npm run lint
+        env:
+          DATA_REF: origin/data
+
+      - name: Build site from data snapshot
         run: npm run build
+        env:
+          DATA_REF: origin/data
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          BUILD_REASON: ${{ inputs.reason || github.event.head_commit.message || 'automatic rebuild' }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -50,4 +76,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

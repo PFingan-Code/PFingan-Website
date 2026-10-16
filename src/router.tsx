@@ -1,4 +1,5 @@
 import MainLayout from '@/src/layouts/MainLayout';
+import AdminPage from '@/src/pages/AdminPage';
 import AboutPage from '@/src/pages/AboutPage';
 import DonatePage from '@/src/pages/DonatePage';
 import HomePage from '@/src/pages/HomePage';
@@ -12,6 +13,7 @@ export const PRERENDER_PATHS = [
   '/moment',
   '/about',
   '/donate',
+  '/admin',
 ] as const;
 
 export function AppRoutes() {
@@ -23,6 +25,7 @@ export function AppRoutes() {
         <Route path="moment" element={<MomentPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="donate" element={<DonatePage />} />
+        <Route path="admin" element={<AdminPage />} />
       </Route>
     </Routes>
   );

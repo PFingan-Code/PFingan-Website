@@ -1,0 +1,48 @@
+name: Check site
+
+on:
+  pull_request:
+    branches:
+      - main
+      - data
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch data branch
+        run: git fetch --no-tags origin data
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate data
+        run: npm run validate:data
+        env:
+          DATA_REF: ${{ github.event_name == 'pull_request' && github.base_ref == 'data' && 'HEAD' || 'origin/data' }}
+
+      - name: Check types
+        run: npm run lint
+        env:
+          DATA_REF: ${{ github.event_name == 'pull_request' && github.base_ref == 'data' && 'HEAD' || 'origin/data' }}
+
+      - name: Build site
+        run: npm run build
+        env:
+          DATA_REF: ${{ github.event_name == 'pull_request' && github.base_ref == 'data' && 'HEAD' || 'origin/data' }}
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/

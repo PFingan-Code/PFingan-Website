@@ -5,23 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build:client": "vite build",
-    "build:ssr": "vite build --ssr src/entry-ssg.tsx --outDir dist-ssr",
-    "build:ssg": "npm run build:client && npm run build:ssr && node ssg.mjs",
+    "prepare:data": "tsx scripts/prepare-data.ts",
+    "validate:data": "tsx scripts/validate-data.ts data",
+    "build:client": "npm run prepare:data && vite build",
+    "build:ssr": "npm run prepare:data && vite build --ssr src/entry-ssg.tsx --outDir dist-ssr",
+    "build:ssg": "npm run prepare:data && vite build && vite build --ssr src/entry-ssg.tsx --outDir dist-ssr && node ssg.mjs",
     "build": "npm run build:ssg",
     "postbuild": "node -e \"require('fs').rmSync('dist-ssr',{recursive:true,force:true});\"",
     "preview": "vite preview",
-    "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "lint": "npm run prepare:data && tsc --noEmit"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
-    "better-sqlite3": "^12.4.1",
     "clsx": "^2.1.1",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "react": "^19.0.0",
@@ -31,7 +29,6 @@
     "vite": "^6.2.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
