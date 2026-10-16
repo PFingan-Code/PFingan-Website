@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentRevision": 2,
-  "contentHash": "f8c773725db5db2cb6722c8ef44f2a0d16d4617c9a225e458f2da1fde0724af4",
-  "updatedAt": "2026-10-16T18:58:44.407Z",
+  "contentRevision": 3,
+  "contentHash": "0337c2d9ca7c71e0b21e5d8b14a7d367f170d08a7810a935005e79d3b3b19b70",
+  "updatedAt": "2026-10-16T19:59:32.571Z",
   "files": [
     "site.json",
     "features.json",
