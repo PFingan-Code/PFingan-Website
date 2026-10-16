@@ -140,7 +140,7 @@
         你访问的页面不存在，可能是链接已失效，或者内容被移动了。可以先回到首页，再通过导航找到你想去的地方。
       </p>
       <div class="actions">
-        <a href="./" class="btn-primary">
+        <a id="home-link" href="./" class="btn-primary">
           <span>返回首页</span>
           <span class="icon">↩</span>
         </a>
@@ -150,6 +150,21 @@
       </div>
       <p class="hint">404 · page not found</p>
     </main>
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        var isGitHubPages = window.location.hostname.endsWith('.github.io');
+        var firstSegment = path.split('/').filter(Boolean)[0];
+        var base = isGitHubPages && firstSegment ? '/' + firstSegment + '/' : '/';
+        var link = document.getElementById('home-link');
+        if (link) link.setAttribute('href', base);
+        if (path !== base && !path.endsWith('/404.html')) {
+          window.setTimeout(function () {
+            window.location.replace(base);
+          }, 1200);
+        }
+      })();
+    </script>
   </body>
   </html>
 

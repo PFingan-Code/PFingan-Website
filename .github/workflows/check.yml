@@ -45,4 +45,4 @@ jobs:
         run: npm run build
         env:
           DATA_REF: ${{ github.event_name == 'pull_request' && github.base_ref == 'data' && 'HEAD' || 'origin/data' }}
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_BASE_PATH: ${{ vars.PAGES_BASE_PATH || '/' }}

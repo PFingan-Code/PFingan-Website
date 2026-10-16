@@ -64,7 +64,7 @@ Token 只保存在当前浏览器的 `sessionStorage`，不会写入 URL、data 
 
 ## 构建与部署
 
-`.github/workflows/deploy.yml` 在 `main` 或 `data` 更新时运行，也支持手动 workflow dispatch。构建 job 固定 checkout `main`，再 fetch `origin/data`，因此代码和内容的职责边界明确。GitHub Pages 项目路径通过 `VITE_BASE_PATH` 配置，workflow 会自动使用仓库名作为路径前缀。
+`.github/workflows/deploy.yml` 在 `main` 或 `data` 更新时运行，也支持手动 workflow dispatch。构建 job 固定 checkout `main`，再 fetch `origin/data`，因此代码和内容的职责边界明确。自定义域默认使用根路径 `/`；若使用 GitHub Pages 项目路径，请在仓库 Settings → Secrets and variables → Actions → Variables 中设置 `PAGES_BASE_PATH`，例如 `/PFingan-Website/`。
 
 构建产物首先使用 data 快照生成 SSG HTML，之后客户端从公开 raw GitHub data 地址检查最新内容。若 data 已更新，页面可以在不重建时显示合法的新内容，但会提示静态 HTML、SEO 元数据和构建版本仍等待重建。
 

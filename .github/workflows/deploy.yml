@@ -58,7 +58,8 @@ jobs:
         run: npm run build
         env:
           DATA_REF: origin/data
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # Custom domains are served from /. For project Pages, set the repository variable PAGES_BASE_PATH (for example /PFingan-Website/).
+          VITE_BASE_PATH: ${{ vars.PAGES_BASE_PATH || '/' }}
           BUILD_REASON: ${{ inputs.reason || github.event.head_commit.message || 'automatic rebuild' }}
 
       - name: Upload artifact
