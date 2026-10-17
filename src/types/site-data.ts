@@ -208,23 +208,24 @@ export interface ResourceItem {
 export interface TeamMember {
   name: string;
   id: string;
-  avatar: string;
+  avatar?: string;
+  useDefaultSkin: boolean;
   role: string;
   description: string;
   links?: ActionLink[];
 }
 
-export interface CommunityMember {
-  id: string;
-  name: string;
-  avatar?: string;
-  sortOrder?: number;
-}
-
 export interface MembersData {
   team: TeamMember[];
-  community: CommunityMember[];
-  avatarProvider?: {enabled: boolean; template?: string};
+  communityPlayerIds: string[];
+  useDefaultSkinAvatars: boolean;
+}
+
+export interface AssetManifestEntry {
+  path: string;
+  sha256: string;
+  bytes: number;
+  contentType: string;
 }
 
 export interface MomentCategory {
@@ -298,8 +299,10 @@ export interface DataManifest {
   schemaVersion: number;
   contentRevision: number;
   contentHash: string;
+  assetHash?: string;
   updatedAt: string;
   files: string[];
+  assets?: AssetManifestEntry[];
 }
 
 export interface BuildMeta {

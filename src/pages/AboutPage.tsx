@@ -2,10 +2,48 @@ import {useSiteData} from '@/src/data/SiteDataProvider';
 import {Github, Users} from 'lucide-react';
 import {motion} from 'motion/react';
 
+const skinAvatar = (id: string) => `https://crafthead.net/helm/${encodeURIComponent(id)}`;
+
 export default function AboutPage() {
-  const {data} = useSiteData();
+  const {data, resolveAsset} = useSiteData();
   const copy = data.site.copy.about;
-  const community = [...data.members.community].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-  const avatarFor = (member: (typeof community)[number]) => member.avatar ?? (data.members.avatarProvider?.enabled && data.members.avatarProvider.template ? data.members.avatarProvider.template.replace('{id}', encodeURIComponent(member.id)) : undefined);
-  return <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className="max-w-7xl mx-auto px-6 py-12 space-y-20"><div className="text-center max-w-2xl mx-auto space-y-4"><h2 className="text-4xl font-bold text-white">{copy.title}</h2>{copy.motto && <p className="text-slate-400 italic">{copy.motto}</p>}<p className="text-slate-400">{copy.description}</p></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">{data.members.team.map((member) => <div key={member.id} className="glass-panel p-8 rounded-3xl text-center space-y-6 group hover:border-brand-primary/30 transition-all"><div className="relative w-24 h-24 mx-auto"><div className="absolute inset-0 bg-brand-primary rounded-2xl rotate-6 group-hover:rotate-12 transition-transform" /><img src={member.avatar} alt={member.name} className="relative w-full h-full object-cover rounded-2xl bg-neutral-800 border-2 border-border-dark" /></div><div className="space-y-2"><h3 className="text-xl font-bold text-white">{member.name}</h3><p className="text-brand-primary text-xs font-bold uppercase tracking-widest">{member.role}</p></div><p className="text-slate-400 text-sm leading-relaxed">{member.description}</p>{member.links && <div className="flex flex-col gap-2 pt-2">{member.links.map((link) => <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-white flex items-center justify-center gap-1"><Github size={12} />{link.label}</a>)}</div>}</div>)}</div><div className="glass-panel p-12 rounded-3xl space-y-8"><div className="flex items-center justify-between"><h3 className="text-2xl font-bold text-white">{copy.communityTitle}</h3><span className="text-slate-500 text-sm">{community.length} {copy.memberCountSuffix}</span></div><p className="text-slate-400">{copy.memberSortLabel}</p>{community.length === 0 ? <div className="flex flex-col items-center justify-center py-8 text-slate-500 text-sm"><Users size={24} className="mb-2" />{copy.empty}</div> : <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">{community.map((member) => <div key={member.id} className="flex flex-col items-center gap-2">{avatarFor(member) ? <div className="w-12 h-12 rounded-lg bg-white/5 border border-border-dark overflow-hidden"><img src={avatarFor(member)} alt={member.name} className="w-full h-full object-cover" /></div> : <div className="w-12 h-12 rounded-lg bg-white/5 border border-border-dark flex items-center justify-center text-slate-600"><Users size={20} /></div>}<span className="text-[10px] text-slate-300 text-center break-all">{member.name}</span></div>)}</div>}<div className="pt-8 border-t border-border-dark text-center"><p className="text-xs text-slate-500">{copy.avatarCredit}</p></div></div></motion.div>;
+  const community = data.members.communityPlayerIds;
+
+  return (
+    <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className="max-w-7xl mx-auto px-6 py-12 space-y-20">
+      <div className="text-center max-w-2xl mx-auto space-y-4">
+        <h2 className="text-4xl font-bold text-white">{copy.title}</h2>
+        {copy.motto && <p className="text-slate-400 italic">{copy.motto}</p>}
+        <p className="text-slate-400">{copy.description}</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {data.members.team.map((member) => {
+          const avatar = member.useDefaultSkin ? skinAvatar(member.id) : member.avatar ? resolveAsset(member.avatar) : undefined;
+          return (
+            <div key={member.id} className="glass-panel p-8 rounded-3xl text-center space-y-6 group hover:border-brand-primary/30 transition-all">
+              <div className="relative w-24 h-24 mx-auto">
+                <div className="absolute inset-0 bg-brand-primary rounded-2xl rotate-6 group-hover:rotate-12 transition-transform" />
+                {avatar ? <img src={avatar} alt={member.name} className="relative w-full h-full object-cover rounded-2xl bg-neutral-800 border-2 border-border-dark" /> : <div className="relative flex h-full w-full items-center justify-center rounded-2xl border-2 border-border-dark bg-neutral-800 text-slate-600"><Users size={24} /></div>}
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                <p className="text-brand-primary text-xs font-bold uppercase tracking-widest">{member.role}</p>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed">{member.description}</p>
+              {member.links && <div className="flex flex-col gap-2 pt-2">{member.links.map((link) => <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-white flex items-center justify-center gap-1"><Github size={12} />{link.label}</a>)}</div>}
+            </div>
+          );
+        })}
+      </div>
+      <div className="glass-panel p-12 rounded-3xl space-y-8">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold text-white">{copy.communityTitle}</h3>
+          <span className="text-slate-500 text-sm">{community.length} {copy.memberCountSuffix}</span>
+        </div>
+        <p className="text-slate-400">{copy.memberSortLabel}</p>
+        {community.length === 0 ? <div className="flex flex-col items-center justify-center py-8 text-slate-500 text-sm"><Users size={24} className="mb-2" />{copy.empty}</div> : <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">{community.map((playerId) => <div key={playerId} className="flex flex-col items-center gap-2">{data.members.useDefaultSkinAvatars ? <div className="w-12 h-12 rounded-lg bg-white/5 border border-border-dark overflow-hidden"><img src={skinAvatar(playerId)} alt={playerId} className="w-full h-full object-cover" /></div> : <div className="w-12 h-12 rounded-lg bg-white/5 border border-border-dark flex items-center justify-center text-slate-600"><Users size={20} /></div>}<span className="text-[10px] text-slate-300 text-center break-all">{playerId}</span></div>)}</div>}
+        <div className="pt-8 border-t border-border-dark text-center"><p className="text-xs text-slate-500">{copy.avatarCredit}</p></div>
+      </div>
+    </motion.div>
+  );
 }

@@ -23,7 +23,7 @@ function isActive(route: string, pathname: string): boolean {
 }
 
 export default function MainLayout() {
-  const {data, resolveAsset, resolveUrl} = useSiteData();
+  const {data, resolveAsset, resolveUrl, previewActive} = useSiteData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -111,6 +111,7 @@ export default function MainLayout() {
 
       <main className="pt-20">
         <DataSyncStatus />
+        {previewActive && <div className="sticky top-0 z-40 border-b border-amber-300/30 bg-amber-300/10 px-4 py-2 text-center text-xs text-amber-100">当前显示未提交草稿预览</div>}
         <Outlet />
       </main>
 

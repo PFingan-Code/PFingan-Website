@@ -4,6 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {canonicalJson} from '../src/data/canonical';
 import {validateSiteData} from '../src/data/schema';
+import {matchesLegacyContentHash} from '../src/data/schema-compat';
 import {DATA_FILES, type DataManifest, type SiteData} from '../src/types/site-data';
 
 const root = process.cwd();
@@ -74,7 +75,7 @@ if (manifest.schemaVersion !== data.schemaVersion) throw new Error('manifest.jso
 for (const file of DATA_FILES) {
   if (!manifest.files.includes(file)) throw new Error(`manifest.json 缺少 ${file}`);
 }
-if (manifest.contentHash !== contentHash) {
+if (manifest.contentHash !== contentHash && !(await matchesLegacyContentHash(data, files['members.json'], files['site.json'], manifest.contentHash))) {
   throw new Error(`manifest.json contentHash 不匹配：期望 ${contentHash}，实际 ${manifest.contentHash}`);
 }
 

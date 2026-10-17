@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "prepare:data": "tsx scripts/prepare-data.ts",
     "validate:data": "tsx scripts/validate-data.ts data",
+    "migrate:data": "tsx scripts/migrate-data.ts",
     "build:client": "npm run prepare:data && vite build",
     "build:ssr": "npm run prepare:data && vite build --ssr src/entry-ssg.tsx --outDir dist-ssr",
     "build:ssg": "npm run prepare:data && vite build && vite build --ssr src/entry-ssg.tsx --outDir dist-ssr && node ssg.mjs",

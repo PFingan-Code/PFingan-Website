@@ -3,6 +3,23 @@ import {SNAPSHOT} from '@/src/data/snapshot';
 import type {DataSource, DataStatus, SiteData} from '@/src/types/site-data';
 import {createContext, useContext, useEffect, useMemo, useState, type ReactNode} from 'react';
 
+interface SiteDataProviderProps {
+  children: ReactNode;
+}
+
+interface DraftPreview {
+  data: SiteData;
+  assets: Record<string, string>;
+}
+
+const DRAFT_PREVIEW_EVENT = 'site-draft-preview';
+let activeDraftPreview: DraftPreview | null = null;
+
+export function setSiteDataPreview(preview: DraftPreview | null): void {
+  activeDraftPreview = preview;
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event(DRAFT_PREVIEW_EVENT));
+}
+
 interface SiteDataContextValue {
   data: SiteData;
   source: DataSource;
@@ -10,6 +27,8 @@ interface SiteDataContextValue {
   buildMeta: typeof SNAPSHOT.meta;
   resolveAsset: (path: string) => string;
   resolveUrl: (url: string) => string;
+  previewActive: boolean;
+  exitPreview: () => void;
 }
 
 const initialStatus: DataStatus = {
@@ -43,6 +62,9 @@ function updateDocumentMetadata(data: SiteData, source: DataSource): void {
     document.head.appendChild(themeColor);
   }
   themeColor.setAttribute('content', data.site.brand.themeColor);
+  document.documentElement.style.setProperty('--color-brand-primary', data.site.brand.themeColor);
+  document.documentElement.style.setProperty('--color-brand-gradient', `color-mix(in srgb, ${data.site.brand.themeColor} 72%, white)`);
+  document.documentElement.style.setProperty('--color-brand-secondary', `color-mix(in srgb, ${data.site.brand.themeColor} 72%, black)`);
   let favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
   if (!favicon) {
     favicon = document.createElement('link');
@@ -64,25 +86,37 @@ function resolveSiteUrl(url: string): string {
   return `${publicBase()}${url.replace(/^\/+/, '')}`;
 }
 
-export function SiteDataProvider({children}: {children: ReactNode}) {
-  const [data, setData] = useState(SNAPSHOT.data);
-  const [source, setSource] = useState<DataSource>('snapshot');
-  const [status, setStatus] = useState<DataStatus>(initialStatus);
+export function SiteDataProvider({children}: SiteDataProviderProps) {
+  const [remoteData, setRemoteData] = useState(SNAPSHOT.data);
+  const [remoteSource, setRemoteSource] = useState<DataSource>('snapshot');
+  const [remoteStatus, setRemoteStatus] = useState<DataStatus>(initialStatus);
+  const [preview, setPreview] = useState<DraftPreview | null>(activeDraftPreview);
+  const isPreview = Boolean(preview);
+  const data = preview?.data ?? remoteData;
+  const source = isPreview ? 'runtime' : remoteSource;
+  const status = isPreview ? {source, state: 'updated' as const, message: '当前显示未提交草稿预览'} : remoteStatus;
 
   useEffect(() => {
+    const handlePreview = () => setPreview(activeDraftPreview);
+    window.addEventListener(DRAFT_PREVIEW_EVENT, handlePreview);
+    return () => window.removeEventListener(DRAFT_PREVIEW_EVENT, handlePreview);
+  }, []);
+
+  useEffect(() => {
+    if (isPreview) return;
     let cancelled = false;
     void loadLatestData(SNAPSHOT.data, SNAPSHOT.meta).then((result) => {
       if (cancelled) return;
       if (result.data) {
-        setData(result.data);
-        setSource('runtime');
+        setRemoteData(result.data);
+        setRemoteSource('runtime');
       }
-      setStatus(result.status);
+      setRemoteStatus(result.status);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isPreview]);
 
   useEffect(() => {
     updateDocumentMetadata(data, source);
@@ -94,10 +128,12 @@ export function SiteDataProvider({children}: {children: ReactNode}) {
       source,
       status,
       buildMeta: SNAPSHOT.meta,
-      resolveAsset: (path: string) => resolveAssetPath(path, data, source),
+      resolveAsset: (path: string) => preview?.assets[path] ?? resolveAssetPath(path, data, source),
       resolveUrl: resolveSiteUrl,
+      previewActive: isPreview,
+      exitPreview: () => setSiteDataPreview(null),
     }),
-    [data, source, status],
+    [data, preview, source, status],
   );
 
   return <SiteDataContext.Provider value={value}>{children}</SiteDataContext.Provider>;

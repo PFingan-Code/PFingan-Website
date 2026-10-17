@@ -112,15 +112,20 @@ export class GitHubClient {
     return {path: result.path, sha: result.sha, content};
   }
 
-  async createBlob(content: string): Promise<string> {
+  async createBlob(content: string, encoding: 'utf-8' | 'base64' = 'utf-8'): Promise<string> {
     const result = await this.request<{sha: string}>(`/repos/${encodeURIComponent(this.owner)}/${encodeURIComponent(this.repo)}/git/blobs`, {
       method: 'POST',
-      body: JSON.stringify({content, encoding: 'utf-8'}),
+      body: JSON.stringify({content, encoding}),
     });
     return result.sha;
   }
 
-  async createTree(baseTreeSha: string, entries: Array<{path: string; sha: string}>): Promise<string> {
+  async getTree(treeSha: string): Promise<Array<{path: string; sha: string; size?: number; type: string}>> {
+    const result = await this.request<{tree: Array<{path: string; sha: string; size?: number; type: string}>}>(`/repos/${encodeURIComponent(this.owner)}/${encodeURIComponent(this.repo)}/git/trees/${encodeURIComponent(treeSha)}?recursive=1`);
+    return result.tree;
+  }
+
+  async createTree(baseTreeSha: string, entries: Array<{path: string; sha: string | null}>): Promise<string> {
     const result = await this.request<{sha: string}>(`/repos/${encodeURIComponent(this.owner)}/${encodeURIComponent(this.repo)}/git/trees`, {
       method: 'POST',
       body: JSON.stringify({base_tree: baseTreeSha, tree: entries.map((entry) => ({path: entry.path, mode: '100644', type: 'blob', sha: entry.sha}))}),

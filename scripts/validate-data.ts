@@ -3,6 +3,7 @@ import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {canonicalJson} from '../src/data/canonical';
 import {validateSiteData} from '../src/data/schema';
+import {matchesLegacyContentHash} from '../src/data/schema-compat';
 import {DATA_FILES, type DataManifest} from '../src/types/site-data';
 import {createHash} from 'node:crypto';
 
@@ -66,7 +67,7 @@ const data = validateSiteData({
 const manifest = JSON.parse(await readSourceFile(source, 'manifest.json')) as DataManifest;
 const contentHash = createHash('sha256').update(canonicalJson(data)).digest('hex');
 if (manifest.schemaVersion !== data.schemaVersion) throw new Error('manifest schemaVersion 不匹配');
-if (manifest.contentHash !== contentHash) throw new Error(`manifest contentHash 不匹配：${manifest.contentHash} != ${contentHash}`);
+if (manifest.contentHash !== contentHash && !(await matchesLegacyContentHash(data, files['members.json'], files['site.json'], manifest.contentHash))) throw new Error(`manifest contentHash 不匹配：${manifest.contentHash} != ${contentHash}`);
 for (const file of DATA_FILES) {
   if (!manifest.files.includes(file)) throw new Error(`manifest 缺少 ${file}`);
 }

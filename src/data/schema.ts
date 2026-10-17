@@ -11,6 +11,11 @@ import type {
 
 const MAX_TEXT_LENGTH = 20_000;
 const URL_PROTOCOLS = new Set(['http:', 'https:', 'mailto:']);
+export const CURRENT_SCHEMA_VERSION = 2;
+export const SUPPORTED_SCHEMA_VERSIONS = [1, CURRENT_SCHEMA_VERSION] as const;
+export const HOME_ICON_KEYS = ['clock', 'shield', 'heart', 'sparkles', 'users', 'server', 'image', 'globe', 'star'] as const;
+export const HIGHLIGHT_COLOR_KEYS = ['blue', 'amber', 'brand', 'emerald', 'rose'] as const;
+const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
 export class DataValidationError extends Error {
   readonly path: string;
@@ -83,7 +88,7 @@ export function validateAssetPath(value: unknown, path: string): string {
   const candidate = string(value, path);
   if (candidate.startsWith('assets/')) {
     const segments = candidate.split('/');
-    if (segments.some((segment) => !segment || segment === '.' || segment === '..')) return fail(path, '资源路径包含非法目录段');
+    if (candidate.includes('\\') || candidate.includes('?') || candidate.includes('#') || segments.some((segment) => !segment || segment === '.' || segment === '..' || !/^[a-zA-Z0-9._-]+$/.test(segment))) return fail(path, '资源路径包含非法目录段或字符');
     return candidate;
   }
   return validateUrl(candidate, path);
@@ -91,6 +96,18 @@ export function validateAssetPath(value: unknown, path: string): string {
 
 function stringArray(value: unknown, path: string): string[] {
   return array(value, path).map((item, index) => string(item, `${path}[${index}]`));
+}
+
+function validateColor(value: unknown, path: string): string {
+  const color = string(value, path);
+  if (!HEX_COLOR.test(color)) fail(path, '颜色必须是 #RRGGBB 格式');
+  return color.toLowerCase();
+}
+
+function validateChoice<const T extends readonly string[]>(value: unknown, path: string, choices: T): T[number] {
+  const candidate = string(value, path);
+  if (!choices.includes(candidate)) fail(path, `值不受支持，可选值：${choices.join('、')}`);
+  return candidate as T[number];
 }
 
 function validateAttachment(value: unknown, path: string) {
@@ -155,58 +172,44 @@ function validateResources(value: unknown): ResourceItem[] {
   return result;
 }
 
-function validateMembers(value: unknown): MembersData {
+function validateMembers(value: unknown, schemaVersion: number): MembersData {
   const item = object(value, 'members');
   const team = array(item.team, 'members.team').map((raw, index) => {
     const path = `members.team[${index}]`;
     const member = object(raw, path);
+    const avatar = member.avatar === undefined ? undefined : validateAssetPath(member.avatar, `${path}.avatar`);
+    const useDefaultSkin = member.useDefaultSkin === undefined ? !avatar : boolean(member.useDefaultSkin, `${path}.useDefaultSkin`);
+    if (schemaVersion >= CURRENT_SCHEMA_VERSION && !useDefaultSkin && (!avatar || !avatar.startsWith('assets/'))) {
+      fail(`${path}.avatar`, '非默认皮肤头像必须引用受控 assets/ 资源');
+    }
     return {
       name: string(member.name, `${path}.name`),
       id: string(member.id, `${path}.id`),
-      avatar: validateUrl(member.avatar, `${path}.avatar`),
+      ...(avatar === undefined ? {} : {avatar}),
+      useDefaultSkin,
       role: string(member.role, `${path}.role`),
       description: string(member.description, `${path}.description`),
       ...(member.links === undefined
         ? {}
-        : {
-            links: array(member.links, `${path}.links`).map((rawLink, linkIndex) => {
-              const linkPath = `${path}.links[${linkIndex}]`;
-              const link = object(rawLink, linkPath);
-              return {
-                label: string(link.label, `${linkPath}.label`),
-                url: validateUrl(link.url, `${linkPath}.url`),
-              };
-            }),
-          }),
+        : {links: array(member.links, `${path}.links`).map((rawLink, linkIndex) => {
+            const linkPath = `${path}.links[${linkIndex}]`;
+            const link = object(rawLink, linkPath);
+            return {label: string(link.label, `${linkPath}.label`), url: validateUrl(link.url, `${linkPath}.url`)};
+          })}),
     };
   });
   assertUniqueIds(team, 'members.team');
-  const community = array(item.community, 'members.community').map((raw, index) => {
-    const path = `members.community[${index}]`;
-    const member = object(raw, path);
-    return {
-      id: string(member.id, `${path}.id`),
-      name: string(member.name, `${path}.name`),
-      ...(member.avatar === undefined ? {} : {avatar: validateUrl(member.avatar, `${path}.avatar`)}),
-      ...(member.sortOrder === undefined ? {} : {sortOrder: number(member.sortOrder, `${path}.sortOrder`)}),
-    };
+  const legacyCommunity = Array.isArray(item.community) ? item.community.map((raw, index) => {
+    const member = object(raw, `members.community[${index}]`);
+    return string(member.id, `members.community[${index}].id`);
+  }) : undefined;
+  const communityPlayerIds = stringArray(item.communityPlayerIds ?? legacyCommunity ?? [], 'members.communityPlayerIds');
+  communityPlayerIds.forEach((id, index) => {
+    if (!/^(?:[A-Za-z0-9_]{3,16}|[0-9a-fA-F]{32}|[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})$/.test(id)) fail(`members.communityPlayerIds[${index}]`, '请输入 3–16 位玩家名称或有效 UUID');
   });
-  assertUniqueIds(community, 'members.community');
-  const avatarProvider = item.avatarProvider === undefined ? undefined : object(item.avatarProvider, 'members.avatarProvider');
-  return {
-    team,
-    community,
-    ...(avatarProvider
-      ? {
-          avatarProvider: {
-            enabled: boolean(avatarProvider.enabled, 'members.avatarProvider.enabled'),
-            ...(avatarProvider.template === undefined
-              ? {}
-              : {template: string(avatarProvider.template, 'members.avatarProvider.template')}),
-          },
-        }
-      : {}),
-  };
+  if (new Set(communityPlayerIds.map((id) => id.toLowerCase())).size !== communityPlayerIds.length) fail('members.communityPlayerIds', '玩家 ID 不能重复');
+  const useDefaultSkinAvatars = item.useDefaultSkinAvatars ?? (object(item.avatarProvider ?? {enabled: true}, 'members.avatarProvider').enabled ?? true);
+  return {team, communityPlayerIds, useDefaultSkinAvatars: boolean(useDefaultSkinAvatars, 'members.useDefaultSkinAvatars')};
 }
 
 function validateMoments(value: unknown): MomentsData {
@@ -276,6 +279,10 @@ function validateDonations(value: unknown): DonationsData {
 
 export function validateSiteData(value: unknown): SiteData {
   const root = object(value, 'data');
+  const schemaVersion = number(root.schemaVersion, 'schemaVersion');
+  if (!SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion as (typeof SUPPORTED_SCHEMA_VERSIONS)[number])) {
+    fail('schemaVersion', `不支持的数据版本：${schemaVersion}`);
+  }
   const site = object(root.site, 'site');
   const brand = object(site.brand, 'site.brand');
   const repository = object(site.repository, 'site.repository');
@@ -364,7 +371,7 @@ export function validateSiteData(value: unknown): SiteData {
       shortName: string(brand.shortName, 'site.brand.shortName'),
       description: string(brand.description, 'site.brand.description'),
       language: string(brand.language, 'site.brand.language'),
-      themeColor: string(brand.themeColor, 'site.brand.themeColor'),
+      themeColor: validateColor(brand.themeColor, 'site.brand.themeColor'),
       logo: validateAssetPath(brand.logo, 'site.brand.logo'),
       favicon: validateAssetPath(brand.favicon, 'site.brand.favicon'),
     },
@@ -481,8 +488,8 @@ export function validateSiteData(value: unknown): SiteData {
     const action = item.action === undefined ? undefined : object(item.action, `${path}.action`);
     return {
       id: string(item.id, `${path}.id`),
-      icon: string(item.icon, `${path}.icon`),
-      color: string(item.color, `${path}.color`),
+      icon: validateChoice(item.icon, `${path}.icon`, HOME_ICON_KEYS),
+      color: validateChoice(item.color, `${path}.color`, HIGHLIGHT_COLOR_KEYS),
       title: string(item.title, `${path}.title`),
       description: string(item.description, `${path}.description`),
       ...(action ? {action: {label: string(action.label, `${path}.action.label`), route: string(action.route, `${path}.action.route`)}} : {}),
@@ -491,8 +498,13 @@ export function validateSiteData(value: unknown): SiteData {
   assertUniqueIds(highlights, 'home.highlights');
   const featuredMomentIds = stringArray(home.featuredMomentIds, 'home.featuredMomentIds');
   if (new Set(featuredMomentIds).size !== featuredMomentIds.length) fail('home.featuredMomentIds', '不能包含重复的瞬间 id');
+  const moments = validateMoments(root.moments);
+  const momentIds = new Set(moments.items.map((moment) => moment.id));
+  featuredMomentIds.forEach((id, index) => {
+    if (!momentIds.has(id)) fail(`home.featuredMomentIds[${index}]`, `引用了不存在的瞬间：${id}`);
+  });
   return {
-    schemaVersion: number(root.schemaVersion, 'schemaVersion'),
+    schemaVersion,
     site: validatedSite,
     navigation,
     contact,
@@ -504,8 +516,8 @@ export function validateSiteData(value: unknown): SiteData {
     features: validatedFeatures,
     servers: validateServers(root.servers),
     resources: validateResources(root.resources),
-    members: validateMembers(root.members),
-    moments: validateMoments(root.moments),
+    members: validateMembers(root.members, schemaVersion),
+    moments,
     donations: validateDonations(root.donations),
   };
 }

@@ -1,5 +1,6 @@
 import {canonicalJson} from '@/src/data/canonical';
-import {validateSiteData} from '@/src/data/schema';
+import {SUPPORTED_SCHEMA_VERSIONS, validateSiteData} from '@/src/data/schema';
+import {matchesLegacyContentHash} from '@/src/data/schema-compat';
 import type {
   BuildMeta,
   DataManifest,
@@ -60,7 +61,7 @@ export async function loadLatestData(
   const manifestUrl = rawDataUrl(repository, 'manifest.json');
   try {
     const manifest = await readJson<DataManifest>(manifestUrl);
-    if (manifest.schemaVersion !== buildMeta.schemaVersion) {
+    if (!SUPPORTED_SCHEMA_VERSIONS.includes(manifest.schemaVersion as (typeof SUPPORTED_SCHEMA_VERSIONS)[number])) {
       return {
         manifest,
         status: {
@@ -89,8 +90,9 @@ export async function loadLatestData(
       ),
     );
     const data = validateSiteData(combineFiles(files));
+    if (data.schemaVersion !== manifest.schemaVersion) throw new Error('远端 manifest 与数据 schemaVersion 不一致');
     const actualHash = await hashText(canonicalJson(data));
-    if (actualHash !== manifest.contentHash) {
+    if (actualHash !== manifest.contentHash && !(await matchesLegacyContentHash(data, files['members.json'], files['site.json'], manifest.contentHash))) {
       throw new Error('远端数据校验和不匹配');
     }
     return {
