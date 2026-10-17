@@ -18,22 +18,42 @@ const ROUTES =
 const indexHtmlPath = path.join(distDir, 'index.html');
 const template = await fs.readFile(indexHtmlPath, 'utf-8');
 
-function injectIntoTemplate(appHtml) {
+function escapeHtml(value) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function injectMetadata(html, metadata) {
+  const language = escapeHtml(metadata.language);
+  const title = escapeHtml(metadata.title);
+  const description = escapeHtml(metadata.description);
+  return html
+    .replace(/<html\b[^>]*\blang="[^"]*"[^>]*>/i, `<html lang="${language}">`)
+    .replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`)
+    .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/>/i, `<meta name="description" content="${description}" />`);
+}
+
+function injectIntoTemplate(appHtml, metadata) {
+  const withMetadata = injectMetadata(template, metadata);
   const marker = '<div id="root"></div>';
-  if (template.includes(marker)) {
-    return template.replace(marker, `<div id="root">${appHtml}</div>`);
+  if (withMetadata.includes(marker)) {
+    return withMetadata.replace(marker, `<div id="root">${appHtml}</div>`);
   }
 
   // Fallback: try to inject just before closing root div
   const altMarker = '<div id="root">';
-  const idx = template.indexOf(altMarker);
+  const idx = withMetadata.indexOf(altMarker);
   if (idx !== -1) {
-    const insertPos = template.indexOf('</div>', idx);
+    const insertPos = withMetadata.indexOf('</div>', idx);
     if (insertPos !== -1) {
       return (
-        template.slice(0, insertPos) +
+        withMetadata.slice(0, insertPos) +
         appHtml +
-        template.slice(insertPos)
+        withMetadata.slice(insertPos)
       );
     }
   }
@@ -41,7 +61,7 @@ function injectIntoTemplate(appHtml) {
   console.warn(
     '[ssg] 未在模板中找到 <div id="root"></div> 占位符，将返回原始模板。',
   );
-  return template;
+  return withMetadata;
 }
 
 async function ensureDir(dir) {
@@ -49,8 +69,8 @@ async function ensureDir(dir) {
 }
 
 for (const url of ROUTES) {
-  const {html} = await render(url);
-  const finalHtml = injectIntoTemplate(html);
+  const {html, metadata} = await render(url);
+  const finalHtml = injectIntoTemplate(html, metadata);
 
   const outPath =
     url === '/'
